@@ -13,44 +13,126 @@
         <section class="row">
             <div class="small-6 columns">
                 <h1 class="text-center">YOU</h1>
-                <div class="healthbar">
-                    <div class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
-
+                <div class="healthbar" >
+                    <div class="healthbar text-center" v-bind:style="{width:playerHealth +'%'}" style="background-color: green; margin: 0; color: white;">
+                        {{playerHealth}}
                     </div>
                 </div>
             </div>
             <div class="small-6 columns">
                 <h1 class="text-center">MONSTER</h1>
                 <div class="healthbar">
-                    <div class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
-
+                    <div class="healthbar text-center" :style="{width:monsterhealth +'%'}" style="background-color: green; margin: 0; color: white;">
+                        {{monsterhealth}}
                     </div>
                 </div>
             </div>
         </section>
-        <section class="row controls">
+        <section class="row controls" v-if="!gameIsRunning">
             <div class="small-12 columns">
-                <button id="start-game">START NEW GAME</button>
+                <button @click="startGame"id="start-game">START NEW GAME</button>
             </div>
         </section>
-        <section class="row controls">
+        <section class="row controls" v-else>
             <div class="small-12 columns">
-                <button id="attack">ATTACK</button>
-                <button id="special-attack">SPECIAL ATTACK</button>
-                <button id="heal">HEAL</button>
-                <button id="give-up">GIVE UP</button>
+                <button id="attack" @click="attack">ATTACK</button>
+                <button id="special-attack" @click="specialAttack">SPECIAL ATTACK</button>
+                <button id="heal" @click="heath">HEAL</button>
+                <button id="give-up" @click="giveUp">GIVE UP</button>
             </div>
         </section>
         <section class="row log">
             <div class="small-12 columns">
                 <ul>
-                    <li>
+                    <li v-for="item in turns">
 
                     </li>
                 </ul>
             </div>
         </section>
     </div>
+    <script>
+        new Vue({
+            el:"#app",
+            data:{
+                playerHealth:100,
+                monsterhealth:100,
+                gameIsRunning:false,
+            },
+            methods:{
+                startGame: function(){
+                   this.gameIsRunning=true;
+                   this.playerHealth=100;
+                   this.monsterhealth=100;
+                },
+                attack: function(){
+                   // var maximo=10;
+                 //   var minimo=3;
+                  //  var demage = Math.max(Math.floor(Math.random()*maximo)+1,minimo);
+                    this.monsterhealth-=this.calcularDemage(3,11);
+                    if (this.monsterhealth <=0){
+                        this.monsterhealth=0;
+                        alert("ganhou")
+                        this.gameIsRunning = false;
+                    }
+
+                    //var maximo=5;
+                   // var minimo=3;
+                   // var demage = Math.max(Math.floor(Math.random()*maximo)+1,minimo);
+                    this.playerHealth-=this.calcularDemage(3,10);
+                    if (this.playerHealth <=0){
+                        this.playerHealth=0;
+                        alert("perdeu")
+                        this.gameIsRunning = false;
+                    }
+                },
+                specialAttack:function(){
+                    this.monsterhealth-=this.calcularDemage(3,30);
+                    if (this.monsterhealth <=0){
+                        this.monsterhealth=0;
+                        alert("ganhou")
+                        this.gameIsRunning = false;
+                    }
+
+                    //var maximo=5;
+                   // var minimo=3;
+                   // var demage = Math.max(Math.floor(Math.random()*maximo)+1,minimo);
+                    this.playerHealth-=this.calcularDemage(3,10);
+                    if (this.playerHealth <=0){
+                        this.playerHealth=0;
+                        alert("perdeu")
+                        this.gameIsRunning = false;
+                    }
+
+                },
+                heath:function(){
+                    this.monsterhealth+=this.calcularDemage(3,30);
+                    if (this.monsterhealth >=100){
+                        this.monsterhealth=100
+                         
+                    }
+
+                    //var maximo=5;
+                   // var minimo=3;
+                   // var demage = Math.max(Math.floor(Math.random()*maximo)+1,minimo);
+                    this.playerHealth+=this.calcularDemage(3,10);
+                    if (this.playerHealth >=100){
+                      this.playerHealth = 100
+                     
+                         
+                    }
+                },
+                giveUp: function(){
+                    alert('nem pensar nisso')
+                    this.gameIsRunning = false;
+                },
+                    calcularDemage(minimo,maximo){
+                         
+                      return  Math.max(Math.floor(Math.random()*maximo)+1,minimo);
+               }
+            }
+        })
+    </script>
 </body>
 
 </html>
