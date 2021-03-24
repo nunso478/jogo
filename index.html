@@ -6,18 +6,19 @@
     <script src="https://npmcdn.com/vue/dist/vue.js"></script>
     <link rel="stylesheet" href="foundation.min.css">
     <link rel="stylesheet" href="app.css">
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
 </head>
 
 <body>
-    <div id="app">
-        
+    <div id="app">  
         <section class="row">
             <div class="small-6 columns">
                 <h1 class="text-center">YOU</h1>
-                <transition name="fade" appear>      
-                        <img src="/imagem/cavaleiro.jpg" alt=""  v-for="item in turns" :key="item.text">
-                    
-                    
+                <transition :enter-active-class="'animate__animated ' + animationP">      
+                        <img src="/imagem/cavaleiro.jpg" alt=""   v-if="shakeP">
                 </transition> 
                
                 <div class="healthbar" >
@@ -29,12 +30,6 @@
             </div>
             <div class="small-6 columns">
                 <h1 class="text-center">MONSTER</h1>
-                <transition name="fade" appear>
-                 
-                        <img src="/imagem/monster.png" alt=""  v-for="item in turns" :key="item.text">
-                    
-                  
-                </transition> 
                 <div class="healthbar">
                     <div class="healthbar text-center" :style="{width:monsterhealth +'%'}" style="background-color: green; margin: 0; color: white;">
                         {{monsterhealth}}
@@ -85,7 +80,9 @@
                 monsterhealth:100,
                 gameIsRunning:false,
                 turns:[],
-                create_id:0
+                create_id:0,
+                animationP:'',
+                shakeP:false
             },
             methods:{
                 startGame: function(){
@@ -135,11 +132,13 @@
                         text:'Player hits player for  ' +  heath2
                 
                     })
+                  
                 },
                 attack: function(){   
                     this.attackturn();
+                  
                     this.monsterhealth-=this.calcularDemage(3,11);
-                    this.playerHealth-=this.calcularDemage(3,10);
+                    this.playerHealth-=this.calcularDemage(3,10); 
                     if (this.monsterhealth <=0){
                         this.monsterhealth=0;
                         alert("ganhou")
@@ -150,6 +149,10 @@
                         alert("perdeu")
                         this.gameIsRunning = false;
                     }
+                    this.animationP="animate__shakeX";
+                    this.shakeP=!this.shakeP;
+                   
+                    
                 },
                 specialAttack:function(){
                     this.specialAttackturns();
