@@ -29,7 +29,11 @@
                 </div>
             </div>
             <div class="small-6 columns">
-                <h1 class="text-center">MONSTER</h1>
+                 <h1 class="text-center">MONSTER</h1>
+                <transition :enter-active-class="'animate__animated ' + animationP">      
+                    <img src="/imagem/monster.png" alt=""   v-if="shakeP">
+            </transition> 
+               
                 <div class="healthbar">
                     <div class="healthbar text-center" :style="{width:monsterhealth +'%'}" style="background-color: green; margin: 0; color: white;">
                         {{monsterhealth}}
@@ -82,7 +86,7 @@
                 turns:[],
                 create_id:0,
                 animationP:'',
-                shakeP:false
+                shakeP:true
             },
             methods:{
                 startGame: function(){
@@ -150,7 +154,7 @@
                         this.gameIsRunning = false;
                     }
                     this.animationP="animate__shakeX";
-                    this.shakeP=!this.shakeP;
+                    this.shakeP = !this.shakeP;
                    
                     
                 },
@@ -188,8 +192,16 @@
                 },
                 calcularDemage(minimo,maximo){
                     return  Math.max(Math.floor(Math.random()*maximo)+1,minimo);
+               }},
+               watch:{
+                   shakeP:function(valor){
+                       var dados = this;
+                       setTimeout(function(){
+                           dados.shakeP = true
+                       }, 1)
+                   }
                }
-            }
+            
         })
     </script>
 </body>
